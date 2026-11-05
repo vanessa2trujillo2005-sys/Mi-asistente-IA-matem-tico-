@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FINANZA | Evaluador de Proyectos</title>
+<style>
+:root{--navy:#10243a;--navy2:#183653;--teal:#0d9488;--teal2:#dff6f2;--gold:#e5b85c;--ink:#172638;--muted:#68788a;--line:#dce5ec;--bg:#f3f6f9;--white:#fff;--red:#bd4b55;--green:#16765e;--shadow:0 12px 32px rgba(16,36,58,.08)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--ink);line-height:1.5}
+header{background:linear-gradient(120deg,var(--navy),#1d4562);color:white;padding:28px max(22px,calc((100% - 1180px)/2));position:relative;overflow:hidden}
+header:after{content:"";position:absolute;width:330px;height:330px;border:1px solid #ffffff20;border-radius:50%;right:7%;top:-210px;box-shadow:0 0 0 35px #ffffff08,0 0 0 70px #ffffff06}
+.brand{font-size:12px;letter-spacing:2.5px;color:#a8d9d4;font-weight:800}.hero{display:flex;justify-content:space-between;align-items:end;gap:20px;position:relative;z-index:1}.hero h1{font-size:clamp(27px,4vw,40px);margin:8px 0 4px;letter-spacing:-1px}.hero p{color:#d3e1eb;margin:0;max-width:680px}.hero-mark{font-size:12px;color:#c7d7e2;border:1px solid #ffffff35;border-radius:30px;padding:9px 14px;white-space:nowrap}
+main{max-width:1180px;margin:26px auto;padding:0 20px 50px}.notice{background:#fff8e8;border:1px solid #f0dfb7;border-radius:12px;padding:12px 15px;color:#735821;font-size:13px;margin-bottom:18px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}.tab{border:1px solid var(--line);background:white;color:var(--muted);padding:10px 16px;border-radius:9px;font-weight:700;cursor:pointer}.tab.active{background:var(--navy);border-color:var(--navy);color:white}
+.panel{background:white;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:22px;margin-bottom:18px}.panel h2{font-size:18px;margin:0 0 5px;color:var(--navy)}.sub{font-size:13px;color:var(--muted);margin:0 0 18px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.field label{display:block;font-size:12px;font-weight:750;color:#526477;margin-bottom:6px}.field input,.field select{width:100%;border:1px solid #cfdbe4;border-radius:9px;padding:11px 12px;font:inherit;color:var(--ink);background:white;outline:none}.field input:focus,.field select:focus{border-color:var(--teal);box-shadow:0 0 0 3px #0d94881a}.field small{display:block;color:#8492a0;font-size:11px;margin-top:4px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin:16px 0 10px}.btn{border:0;border-radius:9px;padding:10px 15px;font-weight:750;cursor:pointer;font-size:13px;transition:.15s}.btn.primary{background:var(--teal);color:white}.btn.dark{background:var(--navy);color:white}.btn.light{background:#edf2f6;color:var(--navy)}.btn.danger{background:#fff0f0;color:var(--red)}.btn:hover{filter:brightness(.96);transform:translateY(-1px)}
+.table-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:11px}table{width:100%;border-collapse:collapse;min-width:580px}th{background:#f3f7fa;color:#536579;text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:11px}td{padding:8px 10px;border-top:1px solid #edf1f4;font-size:13px}td input{width:100%;min-width:105px;padding:8px;border:1px solid #d7e0e7;border-radius:7px;font:inherit}td:first-child{font-weight:750;color:var(--navy)}.cashflow-note{font-size:12px;color:var(--muted);margin-top:9px}
+.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:18px}.results{display:none}.results.show{display:block}.metric-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.metric{border:1px solid var(--line);border-radius:12px;padding:15px;background:#fff}.metric .name{font-size:11px;font-weight:800;letter-spacing:.7px;color:var(--muted);text-transform:uppercase}.metric .value{font-size:24px;font-weight:850;color:var(--navy);margin:5px 0}.metric .hint{font-size:11px;color:var(--muted)}.metric.good{border-top:3px solid var(--teal)}.metric.bad{border-top:3px solid var(--red)}
+.verdict{border-radius:13px;padding:17px;margin-top:16px;background:#e9f7f3;border:1px solid #c5e9df}.verdict.warning{background:#fff7e8;border-color:#f1dfb8}.verdict.reject{background:#fff0f0;border-color:#f1cfd2}.verdict h3{margin:0 0 6px;font-size:16px}.verdict p{margin:5px 0;font-size:13px}.diagnostic-list{padding-left:19px;margin:9px 0 0;font-size:13px}.diagnostic-list li{margin:5px 0}.mini{font-size:11px;color:var(--muted)}
+.chartbox{margin-top:16px;border:1px solid var(--line);border-radius:12px;padding:15px}.bars{display:flex;align-items:end;gap:7px;height:160px;border-bottom:1px solid #cbd6df;padding:8px 5px 0;overflow-x:auto}.barcol{flex:1;min-width:30px;display:flex;flex-direction:column;justify-content:end;align-items:center;height:100%;gap:4px}.bar{width:min(35px,80%);border-radius:5px 5px 0 0;background:linear-gradient(180deg,#20b6a4,#087d76);min-height:2px}.bar.neg{background:linear-gradient(180deg,#dc8589,#b94b55)}.barlabel{font-size:10px;color:var(--muted)}
+.assistant{background:linear-gradient(120deg,#122b43,#1d4b60);color:white;border-radius:16px;padding:22px;box-shadow:var(--shadow)}.assistant h2{margin:0 0 5px;font-size:19px}.assistant p{margin:0;color:#c8d9e5;font-size:13px}.chatlog{margin:17px 0;background:#ffffff0d;border:1px solid #ffffff20;border-radius:10px;padding:13px;min-height:90px;max-height:270px;overflow:auto;font-size:13px}.bubble{padding:9px 11px;border-radius:9px;margin:6px 0;max-width:95%;white-space:pre-wrap}.bubble.bot{background:#ffffff16;color:#f2f7fa}.bubble.user{background:#d8f5ee;color:#173b3b;margin-left:auto}.chatrow{display:flex;gap:8px}.chatrow input{flex:1;min-width:0;border:1px solid #ffffff40;background:#ffffff12;color:white;border-radius:9px;padding:11px;font:inherit}.chatrow input::placeholder{color:#b9cbd7}.chatrow button{background:var(--gold);color:#25364a}
+.hidden{display:none!important}.foot{font-size:11px;color:#8090a0;text-align:center;margin-top:20px}\n.ai-section{margin:12px 0}.ai-section h3{font-size:14px;color:var(--navy);margin:13px 0 5px}.ai-section p{font-size:13px;margin:5px 0;color:#34485b}.ai-section ul{margin:5px 0;padding-left:19px}.ai-section li{font-size:13px;margin:4px 0;color:#34485b}.ai-callout{padding:12px;border-radius:9px;background:#e5f3f1;border-left:4px solid var(--teal);font-size:13px;color:#17483f}.ai-callout.warn{background:#fff4e2;border-color:#d49a36;color:#684b1c}.ai-callout.bad{background:#fff0f0;border-color:var(--red);color:#71343a}
+@media(max-width:760px){.hero{display:block}.hero-mark{display:inline-block;margin-top:14px}.grid{grid-template-columns:1fr 1fr}.metric-grid{grid-template-columns:1fr 1fr}.panel{padding:16px}}
+@media(max-width:460px){.grid,.metric-grid{grid-template-columns:1fr}.hero h1{font-size:28px}}
+@media print{body{background:white}.tabs,.actions,.assistant,.btn{display:none!important}.panel{box-shadow:none;break-inside:avoid}header{padding:18px;background:var(--navy)!important;print-color-adjust:exact}.results{display:block!important}}
+</style>
+</head>
+<body>
+<header><div class="brand">FINANZA · INTELIGENCIA FINANCIERA</div><div class="hero"><div><h1>Evaluador de proyectos de inversión</h1><p>Una herramienta de análisis para convertir flujos de caja en indicadores, criterios y decisiones financieras.</p></div><div class="hero-mark">MODELO DE EVALUACIÓN · v1.0</div></div></header>
+<main>
+<div class="notice"><strong>Nota de uso:</strong> esta herramienta realiza cálculos financieros localmente en tu navegador. El asistente ofrece un diagnóstico basado en reglas financieras; no es un modelo de IA conectado ni sustituye la validación de un analista.</div>
+<div class="tabs"><button class="tab active" data-tab="model">01 · Modelo financiero</button><button class="tab" data-tab="results">02 · Resultados</button><button class="tab" data-tab="assistant">03 · Asistente de análisis</button></div>
+
+<section id="model" class="tabpane">
+<div class="panel">
+<h2>Parámetros del proyecto</h2><p class="sub">Define el contexto de evaluación. La tasa de descuento representa el costo de oportunidad del capital.</p>
+<div class="grid">
+<div class="field"><label for="project">Nombre del proyecto</label><input id="project" value="Proyecto de inversión" maxlength="80"></div>
+<div class="field"><label for="currency">Moneda / unidad</label><select id="currency"><option value="$">COP ($)</option><option value="USD">USD</option><option value="€">EUR (€)</option><option value="">Unidades monetarias</option></select></div>
+<div class="field"><label for="frequency">Periodicidad de los flujos</label><select id="frequency"><option value="Anual">Anual</option><option value="Semestral">Semestral</option><option value="Trimestral">Trimestral</option><option value="Mensual">Mensual</option></select></div>
+<div class="field"><label for="discount">Costo de oportunidad / tasa de descuento (%)</label><input id="discount" type="number" min="0" max="500" step="0.01" value="12"></div>
+<div class="field"><label for="finance">Tasa de financiación (%) · TIRM</label><input id="finance" type="number" min="0" max="500" step="0.01" value="10"><small>Tasa para descontar los flujos negativos.</small></div>
+<div class="field"><label for="reinvest">Tasa de reinversión (%) · TIRM</label><input id="reinvest" type="number" min="0" max="500" step="0.01" value="12"><small>Tasa para capitalizar los flujos positivos.</small></div>
+<div class="field"><label for="horizon">Horizonte máximo aceptable (periodos)</label><input id="horizon" type="number" min="1" max="100" step="1" value="5"></div>
+<div class="field"><label for="scale">Escala de presentación</label><select id="scale"><option value="1">Unidades</option><option value="1000">Miles</option><option value="1000000">Millones</option></select></div>
+<div class="field"><label for="precision">Decimales de resultados</label><select id="precision"><option>2</option><option>0</option><option>3</option><option>4</option></select></div>
+</div>
+<div class="toolbar"><div><strong>Flujos de caja del proyecto</strong><div class="mini">El periodo 0 corresponde a la inversión inicial. Registra valores netos: ingresos menos egresos.</div></div><div><button class="btn light" id="example">Cargar ejemplo</button> <button class="btn light" id="addRow">+ Agregar periodo</button></div></div>
+<div class="table-wrap"><table><thead><tr><th>Periodo</th><th>Flujo neto de caja</th><th>Descripción (opcional)</th><th></th></tr></thead><tbody id="cashRows"></tbody></table></div>
+<div class="cashflow-note">Usa valores positivos para entradas y negativos para salidas. Incluye todos los flujos relevantes, impuestos, capital de trabajo y valor residual cuando corresponda.</div>
+<div class="actions"><button class="btn primary" id="calculate">Calcular indicadores y diagnóstico</button><button class="btn dark" id="saveCsv">Exportar flujos CSV</button><button class="btn light" id="reset">Restablecer</button></div>
+</div>
+</section>
+
+<section id="results" class="tabpane hidden">
+<div class="panel"><h2>Tablero de indicadores</h2><p class="sub" id="resultSubtitle">Calcula el modelo para visualizar los resultados.</p>
+<div class="metric-grid" id="metrics"></div>
+<div id="verdict" class="verdict hidden"></div>
+<div class="panel" id="aiReport" style="margin-top:16px;border:1px solid #cbdde7;background:linear-gradient(145deg,#f8fbfd,#eef6f7)"><h2>✦ Informe automático del asistente FINANZA</h2><p class="sub">Análisis generado inmediatamente a partir de los indicadores y supuestos del modelo.</p><div id="aiReportBody" class="mini">El informe aparecerá automáticamente al calcular el proyecto.</div></div>
+<div class="chartbox"><strong>Perfil de flujos de caja</strong><div class="bars" id="flowChart"></div><div class="mini">Representación de los flujos netos por periodo; no está a escala entre proyectos.</div></div>
+<div class="actions"><button class="btn dark" id="print">Imprimir / Guardar PDF</button><button class="btn light" id="backModel">Volver al modelo</button></div>
+</div>
+<div class="panel"><h2>Lectura de los indicadores</h2><div id="interpretation" class="mini">Los criterios e interpretaciones aparecerán después del cálculo.</div></div>
+</section>
+
+<section id="assistant" class="tabpane hidden">
+<div class="assistant"><h2>Asistente FINANZA</h2><p>Consulta los resultados calculados, los criterios de aceptación y los límites del análisis. Responde con base en tus datos y en reglas de evaluación financiera.</p>
+<div class="chatlog" id="chatlog"><div class="bubble bot">Hola. Soy el asistente de análisis de FINANZA. Primero calcula tu proyecto en la pestaña “Modelo financiero”. Después puedes preguntarme, por ejemplo: “¿Conviene invertir?”, “¿Qué significa el PRI?” o “¿Qué pasa si sube el costo de oportunidad?”.</div></div>
+<div class="chatrow"><input id="chatInput" placeholder="Escribe tu consulta..." maxlength="500"><button class="btn" id="sendChat">Consultar</button></div></div>
+<div class="panel" style="margin-top:16px"><h2>Alcance del diagnóstico</h2><p class="sub">La recomendación combina VPN, TIR, TIRM, recuperación, relación beneficio/costo y horizonte. En proyectos con flujos no convencionales, indicadores aislados pueden ser engañosos.</p><ul class="mini"><li>VPN mayor que cero: el proyecto crea valor frente al costo de oportunidad utilizado.</li><li>TIR mayor que la tasa de descuento: criterio favorable en flujos convencionales.</li><li>TIRM incorpora tasas diferenciadas de financiación y reinversión.</li><li>PRI y PRIA miden recuperación simple y descontada; no valoran por sí solos los flujos posteriores al periodo de recuperación.</li><li>RB/C compara beneficios y costos descontados; se interpreta con cuidado si hay flujos negativos posteriores.</li></ul></div>
+</section>
+<div class="foot">FINANZA · Herramienta de apoyo a la decisión · Verifica supuestos, impuestos, inflación y riesgos antes de aprobar una inversión.</div>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let last=null, chatHistory=[];
+function addRow(value=0,desc=''){const tbody=$('cashRows'),i=tbody.children.length;const tr=document.createElement('tr');tr.innerHTML=`<td>${i===0?'0':i}</td><td><input class="flow" type="number" step="any" value="${value}" aria-label="Flujo del periodo ${i}"></td><td><input class="desc" type="text" maxlength="70" value="${desc.replaceAll('"','&quot;')}" placeholder="${i===0?'Inversión inicial':'Flujo del periodo'}"></td><td><button class="btn danger remove" title="Eliminar periodo" ${i===0?'disabled':''}>×</button></td>`;tbody.appendChild(tr);tr.querySelector('.remove').addEventListener('click',()=>{tr.remove();renumber()});}
+function renumber(){[...$('cashRows').children].forEach((tr,i)=>{tr.cells[0].textContent=i;tr.querySelector('.flow').setAttribute('aria-label','Flujo del periodo '+i);tr.querySelector('.remove').disabled=i===0})}
+function flows(){return [...$('cashRows').querySelectorAll('tr')].map(tr=>Number(tr.querySelector('.flow').value))}
+function rate(id){const v=Number($(id).value);if(!Number.isFinite(v)||v<0||v>500)throw Error('Las tasas deben estar entre 0% y 500%.');return v/100}
+function npv(r,cf){return cf.reduce((s,v,t)=>s+v/Math.pow(1+r,t),0)}
+function irr(cf){ // Búsqueda robusta de raíces; reporta una raíz cuando existe un intervalo con cambio de signo.
+ let f=r=>npv(r,cf), roots=[],lo=-.9999,hi=1,prev=lo,fp=f(prev);
+ for(let x=hi;x<=1e6;x=x<10?x+.05:x*1.5){let fx=f(x);if(fp===0)roots.push(prev);if(fx===0||fp*fx<0){let a=prev,b=x,fa=fp;for(let k=0;k<180;k++){let m=(a+b)/2,fm=f(m);if(Math.abs(fm)<1e-10||b-a<1e-12){a=b=m;break}if(fa*fm<=0)b=m;else{a=m;fa=fm}}roots.push((a+b)/2)}prev=x;fp=fx;if(x===1e6)break}
+ return [...new Set(roots.map(x=>Number(x.toFixed(9))))];
+}
+function mirr(cf,fin,rein){let n=cf.length-1;if(n<=0)return null;let pvNeg=0,fvPos=0;cf.forEach((v,t)=>{if(v<0)pvNeg+=-v/Math.pow(1+fin,t);if(v>0)fvPos+=v*Math.pow(1+rein,n-t)});if(pvNeg===0||fvPos===0)return null;return Math.pow(fvPos/pvNeg,1/n)-1}
+function payback(cf,discounted=false,r=0){let cum=0;for(let t=0;t<cf.length;t++){let v=discounted?cf[t]/Math.pow(1+r,t):cf[t],before=cum;cum+=v;if(cum>=0&&t>0&&before<0){return (t-1)+(-before/v)}}if(cum>=0&&cf[0]>=0)return 0;return null}
+function bcRatio(cf,r){let benefits=0,costs=0;cf.forEach((v,t)=>{let pv=v/Math.pow(1+r,t);if(pv>0)benefits+=pv;else costs-=pv});return costs===0?null:benefits/costs}
+function fmt(v,percent=false){if(v===null||!Number.isFinite(v))return 'No calculable';let d=Number($('precision').value);return percent?(v*100).toFixed(d)+'%':$('currency').value+' '+(v/Number($('scale').value)).toLocaleString('es-CO',{minimumFractionDigits:d,maximumFractionDigits:d})}
+function periodName(){return $('frequency').value.toLowerCase()}
+function calculate(){
+ try{
+ const cf=flows();if(cf.length<2)throw Error('Agrega al menos un flujo después del periodo 0.');if(cf.some(v=>!Number.isFinite(v)))throw Error('Revisa los flujos: hay valores inválidos.');if(cf[0]>=0)throw Error('El flujo del periodo 0 debe ser negativo (inversión inicial).');if(!cf.some(v=>v>0))throw Error('Debe existir al menos un flujo positivo.');if(cf.length>101)throw Error('El modelo admite hasta 100 periodos.');
+ const d=rate('discount'),fin=rate('finance'),rein=rate('reinvest'),h=Number($('horizon').value);if(!Number.isInteger(h)||h<1||h>100)throw Error('El horizonte debe ser un entero entre 1 y 100 periodos.');
+ const vpn=npv(d,cf),roots=irr(cf),tir=roots.length?roots[0]:null,tirm=mirr(cf,fin,rein),pri=payback(cf),pria=payback(cf,true,d),bc=bcRatio(cf,d);
+ const data={cf,d,fin,rein,h,vpn,roots,tir,tirm,pri,pria,bc};last=data;render(data);switchTab('results');
+ }catch(e){alert(e.message)}
+}
+
+function money(v){return fmt(v)}
+function safeText(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function buildAIReport(x){
+ const name=$('project').value.trim()||'Proyecto de inversión';
+ const horizonLabel=`${x.h} periodos ${periodName()}`;
+ const flags=[];
+ const vpnOk=x.vpn>0, tirOk=x.tir!==null&&x.tir>x.d, tirmOk=x.tirm!==null&&x.tirm>x.d, bcOk=x.bc!==null&&x.bc>1;
+ const payOk=x.pria!==null&&x.pria<=x.h, simplePayOk=x.pri!==null&&x.pri<=x.h;
+ const allFlows=x.cf.slice(1), positivePeriods=allFlows.filter(v=>v>0).length, negativePeriods=allFlows.filter(v=>v<0).length;
+ const nonConventional=x.cf.slice(1).some((v,i)=>i>0&&Math.sign(v)!==Math.sign(x.cf[i]));
+ const totalIn=allFlows.filter(v=>v>0).reduce((a,b)=>a+b,0), totalOut=Math.abs(x.cf[0])+allFlows.filter(v=>v<0).reduce((a,b)=>a-b,0);
+ const lastCum=x.cf.reduce((a,b)=>a+b,0);
+ let level,summary,callout;
+ if(vpnOk&&tirmOk&&bcOk&&payOk){level='Favorable';summary='Los indicadores principales respaldan la creación de valor y la recuperación descontada dentro del plazo aceptable.';callout='El proyecto puede avanzar a una etapa de aprobación condicionada a la validación de riesgos, supuestos y disponibilidad de recursos.'}
+ else if(!vpnOk&&(!tirmOk||!bcOk)){level='Desfavorable';summary='Con los supuestos actuales, el proyecto no demuestra creación de valor suficiente frente al rendimiento mínimo exigido.';callout='No se recomienda aprobarlo en su configuración actual. Se sugiere rediseñar la inversión o renegociar costos y beneficios.'}
+ else {level='Condicionado';summary='Los resultados presentan señales mixtas. Algunos criterios son favorables, pero existen condiciones que deben revisarse antes de decidir.';callout='No conviene emitir una aprobación definitiva todavía. Realiza escenarios y valida los criterios que no se cumplen.'}
+ if(!payOk)flags.push('La recuperación descontada no ocurre dentro del horizonte máximo definido por la empresa.');
+ if(!simplePayOk)flags.push('El periodo de recuperación simple excede el horizonte aceptable o no se alcanza.');
+ if(x.roots.length>1)flags.push(`Se identificaron ${x.roots.length} posibles TIR. Los flujos pueden ser no convencionales y la TIR resultar ambigua; prioriza el VPN y la TIRM.`);
+ if(x.tir===null)flags.push('No fue posible identificar una TIR en el rango numérico explorado. No interpretes esto como rentabilidad cero.');
+ if(x.tirm===null)flags.push('La TIRM no pudo calcularse; verifica que haya flujos negativos y positivos y revisa las tasas de financiación y reinversión.');
+ if(x.bc===null)flags.push('La RB/C no pudo calcularse porque no se identificaron costos presentes descontados.');
+ if(nonConventional)flags.push('Hay cambios de signo en los flujos posteriores a la inversión inicial. Esto puede producir múltiples TIR y requiere análisis adicional.');
+ if(x.d!==x.rein)flags.push('La tasa de reinversión es distinta del costo de oportunidad; la TIRM refleja explícitamente este supuesto.');
+ if(x.cf.length-1>x.h)flags.push(`El modelo contiene ${x.cf.length-1} periodos de flujo, más que el horizonte aceptable de ${x.h}. Confirma que ambos horizontes estén alineados.`);
+ if(totalIn<Math.abs(x.cf[0]))flags.push('La suma nominal de entradas posteriores no supera la inversión inicial; revisa si falta valor residual u otros beneficios.');
+ const strengths=[];
+ if(vpnOk)strengths.push(`VPN positivo de ${money(x.vpn)}: el proyecto supera el rendimiento requerido en valor presente.`);
+ else strengths.push(`VPN de ${money(x.vpn)}: el proyecto no alcanza a cubrir el costo de oportunidad en valor presente.`);
+ if(tirmOk)strengths.push(`TIRM de ${fmt(x.tirm,true)}, superior a la tasa exigida de ${fmt(x.d,true)}.`);
+ else strengths.push(`TIRM ${x.tirm===null?'no calculable':fmt(x.tirm,true)}, frente a una tasa exigida de ${fmt(x.d,true)}.`);
+ if(bcOk)strengths.push(`RB/C de ${x.bc.toFixed(3)}: por cada unidad de costo presente se obtienen ${x.bc.toFixed(3)} unidades de beneficio presente.`);
+ else strengths.push(`RB/C ${x.bc===null?'no calculable':x.bc.toFixed(3)}; el umbral de referencia es mayor que 1.`);
+ if(payOk)strengths.push(`PRIA de ${x.pria.toFixed(2)} periodos, dentro del horizonte aceptable de ${horizonLabel}.`);
+ else strengths.push(`PRIA ${x.pria===null?'no alcanzado':x.pria.toFixed(2)+' periodos'}, comparado con ${horizonLabel}.`);
+ const actions=[];
+ if(!vpnOk)actions.push('Negociar una menor inversión inicial, reducir costos operativos o fortalecer ingresos para elevar el VPN.');
+ if(!tirmOk)actions.push('Revisar las tasas de financiación y reinversión, y comprobar si los flujos proyectados son realistas.');
+ if(!bcOk)actions.push('Identificar costos omitidos, beneficios incrementales y posibles valores residuales; confirmar que todos los rubros estén expresados en la misma moneda y periodicidad.');
+ if(!payOk)actions.push('Evaluar un horizonte económico mayor solo si está justificado por la vida útil del activo y la estrategia de la empresa.');
+ actions.push('Construir escenarios pesimista, base y optimista; variar inversión, ventas, costos y tasa de descuento para medir la sensibilidad.');
+ actions.push('Validar impuestos, inflación, capital de trabajo, mantenimiento, reposiciones, valor residual y riesgos antes de presentar el proyecto al comité.');
+ const periodFactor={'Anual':'anual','Semestral':'semestral','Trimestral':'trimestral','Mensual':'mensual'}[$('frequency').value]||'del periodo';
+ const rootLine=x.roots.length>1?`Se detectaron varias raíces posibles de TIR (${x.roots.map(v=>(v*100).toFixed(2)+'%').join(', ')}); se debe evitar una decisión basada en una TIR aislada.`:'';
+ const textReport=`INFORME AUTOMÁTICO FINANZA — ${name}\nDiagnóstico: ${level}. ${summary}\nVPN: ${money(x.vpn)}. TIR: ${x.tir===null?'No calculable':fmt(x.tir,true)}. TIRM: ${x.tirm===null?'No calculable':fmt(x.tirm,true)}. PRI: ${x.pri===null?'No recupera':x.pri.toFixed(2)+' periodos'}. PRIA: ${x.pria===null?'No recupera':x.pria.toFixed(2)+' periodos'}. RB/C: ${x.bc===null?'No calculable':x.bc.toFixed(3)}.\nCosto de oportunidad: ${fmt(x.d,true)} por periodo ${periodFactor}. Horizonte aceptable: ${horizonLabel}.\nFortalezas y hallazgos: ${strengths.join(' ')}\nAlertas: ${flags.length?flags.join(' '):'No se detectaron alertas automáticas adicionales.'}\nRecomendaciones: ${actions.join(' ')}\nConclusión: ${callout}`;
+ const html=`<div class="ai-callout ${level==='Desfavorable'?'bad':level==='Condicionado'?'warn':''}"><strong>Diagnóstico: ${level.toUpperCase()}</strong><br>${safeText(summary)}<br><strong>${safeText(callout)}</strong></div>
+ <div class="ai-section"><h3>1. Lectura ejecutiva</h3><p>Se evaluó <b>${safeText(name)}</b> con una tasa de oportunidad de <b>${fmt(x.d,true)}</b> por periodo y un horizonte aceptable de <b>${horizonLabel}</b>. Se registraron ${x.cf.length-1} periodos de flujos, con ${positivePeriods} periodos de entradas y ${negativePeriods} periodos con salidas adicionales.</p></div>
+ <div class="ai-section"><h3>2. Qué dicen los indicadores</h3><ul>${strengths.map(v=>`<li>${safeText(v)}</li>`).join('')}</ul><p>${safeText(rootLine)}</p></div>
+ <div class="ai-section"><h3>3. Alertas y aspectos a validar</h3><ul>${(flags.length?flags:['No se detectaron alertas automáticas adicionales. Aun así, verifica la calidad de los datos y los riesgos del proyecto.']).map(v=>`<li>${safeText(v)}</li>`).join('')}</ul></div>
+ <div class="ai-section"><h3>4. Recomendaciones de gestión</h3><ul>${actions.map(v=>`<li>${safeText(v)}</li>`).join('')}</ul></div>
+ <div class="ai-section"><h3>5. Conclusión para la toma de decisión</h3><p>${safeText(callout)} La decisión final debe considerar alineación estratégica, liquidez, capacidad de endeudamiento, riesgos técnicos, regulatorios y comerciales; estos elementos no están modelados automáticamente en los indicadores.</p></div>
+ <p class="mini"><b>Transparencia:</b> informe generado automáticamente mediante reglas financieras determinísticas dentro del archivo HTML. No consulta un servicio externo ni inventa datos; interpreta los valores ingresados. Tasas y flujos deben tener la misma periodicidad.</p>`;
+ return {html,text:textReport,level};
+}
+function render(x){
+ $('resultSubtitle').textContent=`${$('project').value||'Proyecto'} · ${x.cf.length-1} periodos ${periodName()} · tasa de descuento ${fmt(x.d,true)}`;
+ const metrics=[
+ ['VPN',fmt(x.vpn),'Valor presente neto al costo de oportunidad',x.vpn>=0],
+ ['TIR',x.tir===null?'No calculable':fmt(x.tir,true),x.roots.length>1?'Se detectaron varias raíces posibles': 'Rentabilidad interna del flujo',x.tir!==null&&x.tir>x.d],
+ ['TIRM',x.tirm===null?'No calculable':fmt(x.tirm,true),'Tasa modificada con financiación y reinversión',x.tirm!==null&&x.tirm>x.d],
+ ['PRI',x.pri===null?'No recupera':x.pri.toFixed(2)+' periodos','Recuperación simple de la inversión',x.pri!==null&&x.pri<=x.h],
+ ['PRIA',x.pria===null?'No recupera':x.pria.toFixed(2)+' periodos','Recuperación con flujos descontados',x.pria!==null&&x.pria<=x.h],
+ ['RB/C',x.bc===null?'No calculable':x.bc.toFixed(Number($('precision').value)),'Beneficios presentes / costos presentes',x.bc!==null&&x.bc>1]
+ ];
+ $('metrics').innerHTML=metrics.map(m=>`<div class="metric ${m[3]?'good':'bad'}"><div class="name">${m[0]}</div><div class="value">${m[1]}</div><div class="hint">${m[2]}</div></div>`).join('');
+ let positive=x.vpn>0,fast=x.pria!==null&&x.pria<=x.h,bcok=x.bc!==null&&x.bc>1,rateok=x.tirm!==null&&x.tirm>x.d;
+ let accept=positive&&bcok&&rateok;let cls=accept?'':(!positive&&!bcok?'reject':'warning');
+ let title=accept?'Proyecto financieramente atractivo':cls==='reject'?'Proyecto no recomendable bajo los supuestos actuales':'Proyecto condicionado: requiere revisión';
+ let reasons=[];
+ reasons.push(`VPN ${positive?'positivo':'no positivo'} frente al costo de oportunidad de ${fmt(x.d,true)}.`);
+ reasons.push(`TIRM ${rateok?'supera':'no supera'} el costo de oportunidad.`);
+ reasons.push(`RB/C ${bcok?'mayor':'no mayor'} que 1.`);
+ reasons.push(x.pria===null?'La inversión no se recupera en el horizonte de flujos.':`La recuperación descontada ocurre en ${x.pria.toFixed(2)} periodos; ${fast?'dentro':'fuera'} del horizonte máximo aceptable de ${x.h}.`);
+ if(x.roots.length>1)reasons.push(`Atención: se detectaron ${x.roots.length} TIR posibles. En flujos no convencionales, no uses una sola TIR para decidir.`);
+ if(x.pri!==null&&x.pri>x.h)reasons.push('El PRI simple supera el horizonte máximo aceptable.');
+ if(x.pria===null||x.pria>x.h)reasons.push('El PRIA no cumple el horizonte definido por la empresa.');
+ $('verdict').className='verdict '+cls;$('verdict').innerHTML=`<h3>${title}</h3><p>Diagnóstico automático orientativo, no una aprobación de inversión.</p><ul class="diagnostic-list">${reasons.map(r=>`<li>${r}</li>`).join('')}</ul><p><strong>Recomendación:</strong> ${accept?'considerar la aprobación, sujeta a sensibilidad, riesgos y validación de supuestos.': 'revisar monto de inversión, generación de caja, costos, plazo y supuestos; comparar escenarios antes de decidir.'}</p>`;
+ $('verdict').classList.remove('hidden');
+ $('interpretation').innerHTML=`<p><b>VPN:</b> ${positive?'El valor presente de las entradas supera la inversión y el rendimiento exigido.':'El proyecto no alcanza a cubrir la inversión y el rendimiento exigido con los flujos estimados.'}</p>
+ <p><b>TIR:</b> ${x.tir===null?'No se encontró una raíz válida en el rango explorado.':`La tasa que hace VPN=0 es ${fmt(x.tir,true)}. Comparada con ${fmt(x.d,true)}.`}</p>
+ <p><b>TIRM:</b> ${x.tirm===null?'No se pudo calcular; verifica que existan flujos positivos y negativos.':`Rentabilidad modificada de ${fmt(x.tirm,true)}, usando financiación ${fmt(x.fin,true)} y reinversión ${fmt(x.rein,true)}.`}</p>
+ <p><b>PRI / PRIA:</b> ${x.pri===null?'No hay recuperación simple dentro de los flujos.':`PRI: ${x.pri.toFixed(2)} periodos.`} ${x.pria===null?'No hay recuperación descontada dentro de los flujos.':`PRIA: ${x.pria.toFixed(2)} periodos.`} Se interpola dentro del periodo de recuperación.</p>
+ <p><b>RB/C:</b> ${x.bc===null?'No se puede calcular porque no hay costos descontados.':`Por cada unidad monetaria de costo presente, se generan ${x.bc.toFixed(3)} unidades de beneficio presente.`}</p>
+ <p><b>Horizonte:</b> ${x.h} periodos. El PRI/PRIA debe contrastarse con la política interna y la vida económica real del activo.</p>
+ <p class="mini">Convención: periodicidad de tasas igual a la periodicidad de los flujos. Para tasas anuales con flujos mensuales/trimestrales, convierte las tasas a la periodicidad correspondiente antes de calcular. La RB/C considera como beneficios los flujos positivos y como costos todos los negativos, incluido el periodo 0.</p>`;
+ $('flowChart').innerHTML=x.cf.map((v,i)=>{let max=Math.max(...x.cf.map(Math.abs))||1,h=Math.max(2,Math.abs(v)/max*125);return `<div class="barcol"><div class="bar ${v<0?'neg':''}" style="height:${h}px" title="${v}"></div><span class="barlabel">P${i}</span></div>`}).join('');
+ const report=buildAIReport(x);$('aiReportBody').innerHTML=report.html;
+ appendChat('bot','Análisis automático listo. He evaluado el proyecto y dejé el informe ejecutivo completo en la pestaña “Resultados”, debajo del diagnóstico.\n\n'+report.text);
+}
+function appendChat(kind,message){const log=$('chatlog');if(!log)return;const b=document.createElement('div');b.className='bubble '+kind;b.textContent=message;log.appendChild(b);log.scrollTop=log.scrollHeight}
+function switchTab(id){document.querySelectorAll('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));document.querySelectorAll('.tabpane').forEach(p=>p.classList.toggle('hidden',p.id!==id))}
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.tab)));
+$('addRow').onclick=()=>{if($('cashRows').children.length>=101)return alert('Máximo 100 periodos.');addRow();};
+$('calculate').onclick=calculate;$('backModel').onclick=()=>switchTab('model');$('print').onclick=()=>window.print();
+$('example').onclick=()=>{$('cashRows').innerHTML='';[-100000,30000,35000,40000,45000,40000].forEach((v,i)=>addRow(v,i===0?'Inversión inicial':'Flujo operativo'));$('project').value='Modernización de equipos';$('discount').value=12;$('finance').value=10;$('reinvest').value=12;$('horizon').value=5};
+$('reset').onclick=()=>{if(!confirm('¿Restablecer todos los flujos y parámetros?'))return;$('cashRows').innerHTML='';addRow(-100000);addRow(30000);$('project').value='Proyecto de inversión';$('discount').value=12;$('finance').value=10;$('reinvest').value=12;$('horizon').value=5;last=null};
+$('saveCsv').onclick=()=>{let rows=[['Periodo','Flujo neto','Descripción']];[...$('cashRows').children].forEach((tr,i)=>rows.push([i,tr.querySelector('.flow').value,tr.querySelector('.desc').value]));let csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v).replaceAll('"','""')+'"').join(';')).join('\n');let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='flujos_proyecto.csv';a.click();URL.revokeObjectURL(a.href)};
+function assistantReply(q){
+ const s=q.toLowerCase();if(!last)return 'Para darte un diagnóstico numérico, primero ve a “Modelo financiero” y pulsa “Calcular indicadores y diagnóstico”. Mientras tanto, puedo explicar los conceptos generales.';
+ const x=last;
+ if(/conviene|recomienda|decisi[oó]n|invertir|aceptar/.test(s))return `Para “${$('project').value}”, el diagnóstico actual es: VPN ${fmt(x.vpn)}, TIRM ${x.tirm===null?'no calculable':fmt(x.tirm,true)}, RB/C ${x.bc===null?'no calculable':x.bc.toFixed(3)}. ${x.vpn>0&&x.tirm>x.d&&x.bc>1?'Los indicadores principales son favorables frente al costo de oportunidad. Aun así, valida riesgos y escenarios.':'Hay indicadores que no cumplen los criterios de aceptación. Conviene revisar supuestos y no aprobar únicamente con base en la TIR.'} El horizonte máximo configurado es ${x.h} periodos.`;
+ if(/vpn|valor presente/.test(s))return `El VPN es ${fmt(x.vpn)}. Se obtiene descontando cada flujo a la tasa de oportunidad (${fmt(x.d,true)}) y sumándolos, incluido el desembolso inicial. Si es positivo, el proyecto crea valor por encima del rendimiento exigido; si es negativo, destruye valor frente a esa tasa.`;
+ if(/\btir\b|tasa interna/.test(s))return `La TIR calculada es ${x.tir===null?'no calculable':fmt(x.tir,true)}. Se compara con el costo de oportunidad (${fmt(x.d,true)}). Si la supera, el criterio es favorable para flujos convencionales. ${x.roots.length>1?'Se detectaron varias raíces; en este caso la TIR puede ser ambigua y el VPN es el criterio principal.':''}`;
+ if(/tirm|modificada/.test(s))return `La TIRM es ${x.tirm===null?'no calculable':fmt(x.tirm,true)}. Usa tasa de financiación ${fmt(x.fin,true)} para flujos negativos y tasa de reinversión ${fmt(x.rein,true)} para positivos. Es útil cuando se desea explicitar esos supuestos y evitar la reinversión implícita a la TIR.`;
+ if(/\bpri\b|recuperaci[oó]n simple/.test(s))return `El PRI es ${x.pri===null?'no se alcanza dentro de los flujos':x.pri.toFixed(2)+' periodos'}. Mide cuándo los flujos nominales acumulados recuperan el desembolso. No descuenta el valor del dinero en el tiempo y omite lo que ocurra después de recuperar.`;
+ if(/pria|recuperaci[oó]n descontada/.test(s))return `El PRIA es ${x.pria===null?'no se alcanza dentro de los flujos':x.pria.toFixed(2)+' periodos'}. Acumula los flujos descontados al costo de oportunidad (${fmt(x.d,true)}). Es más exigente que el PRI y debe compararse con el horizonte aceptable de ${x.h} periodos.`;
+ if(/rb.?\/?c|beneficio.?costo|relaci[oó]n/.test(s))return `La relación beneficio/costo es ${x.bc===null?'no calculable':x.bc.toFixed(3)}. Un valor mayor que 1 indica que los beneficios presentes superan los costos presentes. En este modelo se consideran como costos todos los flujos negativos y como beneficios todos los positivos, descontados a ${fmt(x.d,true)}.`;
+ if(/oportunidad|descuento|tasa/.test(s))return `El costo de oportunidad es el rendimiento mínimo requerido por la empresa para comprometer capital en este proyecto. El modelo usa ${fmt(x.d,true)} por ${periodName()}. Si aumenta, normalmente disminuye el VPN y puede aumentar el PRIA. La tasa debe estar en la misma periodicidad que los flujos y ser coherente con inflación y riesgo.`;
+ if(/horizonte|plazo/.test(s))return `El horizonte máximo configurado es ${x.h} periodos ${periodName()}. PRI: ${x.pri===null?'no recupera':x.pri.toFixed(2)}; PRIA: ${x.pria===null?'no recupera':x.pria.toFixed(2)}. La recuperación descontada dentro del horizonte es una señal útil, pero no sustituye el análisis de VPN ni la evaluación de vida útil y estrategia empresarial.`;
+ if(/sensibilidad|sube|aumenta/.test(s))return `Si sube el costo de oportunidad, los flujos futuros valen menos hoy: el VPN tiende a bajar, el PRIA tiende a alargarse y la RB/C puede reducirse. En tu proyecto, el VPN base es ${fmt(x.vpn)} con tasa ${fmt(x.d,true)}. Cambia la tasa en el modelo y vuelve a calcular; compara ambos informes para cuantificar el efecto.`;
+ if(/riesgo|alerta|problema|debilidad/.test(s)){const r=buildAIReport(x);return `Las principales alertas para ${$('project').value} son: ${r.text.split('Alertas: ')[1]?.split('\n')[0]||'valida los supuestos del proyecto'}. Además, verifica sensibilidad de ingresos y costos, concentración de clientes/proveedores, permisos, ejecución, liquidez y valor residual. Esos riesgos cualitativos no se miden directamente con VPN o TIR.`}
+ if(/flujo|caja|periodo/.test(s))return `El modelo contiene ${x.cf.length-1} periodos después de la inversión inicial. La inversión del periodo 0 es ${fmt(x.cf[0])}; las entradas futuras suman nominalmente ${fmt(x.cf.slice(1).filter(v=>v>0).reduce((a,b)=>a+b,0))}. Revisa que los flujos sean incrementales, netos de impuestos y coherentes con la periodicidad ${periodName()}.`;
+ if(/supuesto|metodolog|limitaci[oó]n/.test(s))return `Este cálculo supone flujos al final de cada periodo, tasa constante por periodo y periodicidad homogénea. La TIR se estima buscando cambios de signo y puede tener múltiples raíces; la TIRM usa las tasas de financiación y reinversión ingresadas. PRI y PRIA interpolan dentro del periodo y no sustituyen el VPN. El modelo no incorpora automáticamente inflación, impuestos, deuda, riesgo ni escenarios.`;
+ if(/comparar|escenario/.test(s))return `Para comparar escenarios, guarda o exporta los flujos actuales y modifica una variable a la vez: inversión inicial, ventas, costos, tasa de descuento o plazo. Vuelve a calcular y compara especialmente el VPN, la TIRM, el PRIA y la RB/C. El escenario más útil para la decisión no es solo el optimista: identifica también el caso pesimista y el punto en que el VPN llega a cero.`;
+ return `Puedo analizar VPN, TIR, TIRM, PRI, PRIA, RB/C, costo de oportunidad, horizonte, riesgos, supuestos y escenarios. Para ${$('project').value}, el VPN actual es ${fmt(x.vpn)}, la TIRM es ${x.tirm===null?'no calculable':fmt(x.tirm,true)} y la tasa de descuento es ${fmt(x.d,true)}. Pregúntame por un indicador o por la decisión de inversión; también puedes consultar el informe automático que aparece al calcular.`;
+}
+function send(){let inp=$('chatInput'),q=inp.value.trim();if(!q)return;appendChat('user',q);appendChat('bot',assistantReply(q));inp.value=''}
+$('sendChat').onclick=send;$('chatInput').addEventListener('keydown',e=>{if(e.key==='Enter')send()});
+addRow(-100000,'Inversión inicial');addRow(30000,'Flujo operativo');
+</script>
+</body></html>
